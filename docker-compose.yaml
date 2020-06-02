@@ -1,0 +1,33 @@
+
+version: "3"
+services:
+  nginx:
+    restart: always
+    build: 
+      dockerfile: DockerFile
+      context: ./nginx
+    ports:
+      - '3055:80'
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./Corona-HelpDesk
+    volumes:
+      - /app/node_modules
+      - ./Corona-HelpDesk:/app
+    depends_on: 
+      - frontend
+  chatapi:
+    build:
+      dockerfile: Dockerfile
+      context: ./covid-chat
+    depends_on: 
+      - frontend
+  frontend:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile_test
+      context: ./covid
+    volumes:
+      - /app/node_modules
+      - ./covid:/app
